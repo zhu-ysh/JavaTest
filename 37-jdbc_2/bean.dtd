@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT beans (bean*)>
+<!ELEMENT bean (property*)>
+<!ATTLIST bean id CDATA #REQUIRED>
+<!ATTLIST bean class CDATA #REQUIRED>
+<!ATTLIST property name CDATA #REQUIRED>
+<!ATTLIST property value CDATA #REQUIRED>

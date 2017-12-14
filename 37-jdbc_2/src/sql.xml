@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans SYSTEM "bean.dtd">
+<beans>
+	<bean id="dataSource" class="util.MyDataSource">
+		<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+		<property name="name" value="scott"/>
+		<property name="password" value="123456"/>
+	</bean>
+</beans>
