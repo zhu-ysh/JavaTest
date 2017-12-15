@@ -60,9 +60,4 @@ public class Users {
 		this.userUpDateTime = userUpDateTime;
 		this.userStatus = userStatus;
 	}
-	public Users(String userName, String userPassWord) {
-		super();
-		this.userName = userName;
-		this.userPassWord = userPassWord;
-	}
 }
