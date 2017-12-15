@@ -141,8 +141,203 @@ public class UserGoodsDaoImpl implements UserGoodsDao{
 	}
 
 	@Override
-	public String[] selectMonthTxt(Users user) {
-		// TODO Auto-generated method stub
-		return null;
+	public int selectMonthTxt(Users user) {
+		String sql = "select sum(goods_buy_price*goods_count),sum(goods_count),to_char(usergoods_settime,'YYYY-MM')\r\n" + 
+				"from userGoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"group by to_char(usergoods_settime,'YYYY-MM')";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int i = 0;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, user.getUserId());
+			rs = ps.executeQuery();
+			while(rs.next()){
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(null!=rs){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null!=ps){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return i;
+	}
+
+	@Override
+	public ArrayList<String> selectMonthTxt(Users user, int p, int num) {
+		String sql = "select * from \r\n" + 
+				"(select sum(goods_buy_price*goods_count),sum(goods_count),to_char(usergoods_settime,'YYYY-MM')\r\n" + 
+				"from userGoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"and usergoods_status = 0\r\n" + 
+				"group by to_char(usergoods_settime,'YYYY-MM'))\r\n" + 
+				"where rownum between ?*?-(?-1) and ?*?";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ArrayList<String> arr = new ArrayList<String>();
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, user.getUserId());
+			ps.setInt(2, num);
+			ps.setInt(3, p);
+			ps.setInt(4, num);
+			ps.setInt(5, num);
+			ps.setInt(6, p);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				arr.add(rs.getString(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3)+"ÔÂ");
+			}
+			return arr;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(null!=rs){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null!=ps){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	
+	
+	
+	
+	
+	/*select 
+	ug.usergoods_id,t.goods_id,a,ug.goods_buy_price,ug.usergoods_settime
+	from (
+	select goods_id,avg(goods_buy_price) a
+	from userGoods
+	where user_id = 2
+	and usergoods_status = 0
+	group by goods_id ) t,userGoods ug
+	where t.goods_id = ug.goods_id
+	and ug.user_id = 2
+	and ug.usergoods_status = 0
+	and ug.goods_buy_price > t.a*/
+	
+	@Override
+	public int upAvgPirceGoods(Users user) {
+		String sql = "select goods_id\r\n" + 
+				"from usergoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"and usergoods_status = 0\r\n" + 
+				"and goods_buy_price >(\r\n" + 
+				"select ceil(sum(goods_buy_price*goods_count)/sum(goods_count))\r\n" + 
+				"from usergoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"and usergoods_status = 0\r\n" + 
+				")";
+		PreparedStatement ps = null;	
+		ResultSet rs = null;
+		int i = 0;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, user.getUserId());
+			ps.setInt(2, user.getUserId());
+			rs = ps.executeQuery();
+			while(rs.next()){
+				i++;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(null!=rs){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null!=ps){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return i;
+	}
+
+	@Override
+	public ArrayList<UserGoods> upAvgPirceGoods(Users user, int p, int num) {
+		String sql = "select * from\r\n" + 
+				"(select goods_id\r\n" + 
+				"from usergoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"and usergoods_status = 0\r\n" + 
+				"and goods_buy_price >(\r\n" + 
+				"select ceil(sum(goods_buy_price*goods_count)/sum(goods_count))\r\n" + 
+				"from usergoods\r\n" + 
+				"where user_id = ?\r\n" + 
+				"and usergoods_status = 0))\r\n" + 
+				"where rownum between ?*?-(?-1) and ?*?";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ArrayList<UserGoods> arr = new ArrayList<UserGoods>();
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, user.getUserId());
+			ps.setInt(2, user.getUserId());
+			ps.setInt(3, num);
+			ps.setInt(4, p);
+			ps.setInt(5, num);
+			ps.setInt(6, num);
+			ps.setInt(7, p);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				UserGoods ug = new UserGoods();
+				ug.setGoodsId(rs.getInt(1));
+				arr.add(ug);
+			}
+			return arr;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(null!=rs){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null!=ps){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
