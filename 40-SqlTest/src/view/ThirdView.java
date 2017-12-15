@@ -1,5 +1,6 @@
 package view;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -45,13 +46,41 @@ public class ThirdView {
 	//2.查看时间段内购买的所有商品(提示输入开始时间,结束时间)
 	public void timeBuyGoods(Users user){
 		System.out.println("======== 查看时间段内购买的所有商品  ===========");
-		System.out.println("");
-		System.out.println("");
+		System.out.println("请输入开始时间:");
+		System.out.println("请输入开始年:");
+		int year = scan.nextInt();
+		System.out.println("请输入开始月:");
+		int month = scan.nextInt();
+		System.out.println("请输入开始日:");
+		int day = scan.nextInt();
+		Timestamp t1 = new Timestamp(year-1900, month, day, 0, 0, 0, 0);
+		System.out.println("请输入结束时间:");
+		System.out.println("请输入结束年:");
+		year = scan.nextInt();
+		System.out.println("请输入结束月:");
+		month = scan.nextInt();
+		System.out.println("请输入结束日:");
+		day = scan.nextInt();
+		Timestamp t2 = new Timestamp(year-1900, month, day, 0, 0, 0, 0);
+		
+		ArrayList<UserGoods> userGoodss = userGoodsDaoImpl.selectUserTimeBuyGoods(user, t1, t2);
+		System.out.println("订单号\t商品名\t购买数量\t购买时价格\t购买时间");
+		for (Iterator iterator = userGoodss.iterator(); iterator.hasNext();) {
+			UserGoods userGoods2 = (UserGoods) iterator.next();
+			System.out.print(userGoods2.getUserGoodsId()+"\t");
+			Goods goods = goodsDaoImpl.selectById(userGoods2.getGoodsId());
+			System.out.print(goods.getGoodsName()+"\t");
+			System.out.print(userGoods2.getGoodsCount()+"\t");
+			System.out.print(userGoods2.getGoods_buy_price()+"\t");
+			System.out.println(userGoods2.getUserGoodsSetTime());
+		}
+		
 	}
 
 	//3.查看月消费详细(查看每月消费金额和购买商品数量,要求有分页,5条)
 	public void monthBuyTxt(Users user){
 		System.out.println("======== 查看月消费详细  ===========");
+		
 	}
 	
 	//4.查看高于平均购买价格的所有商品(使用1条SQL语句?,分页,5条)
