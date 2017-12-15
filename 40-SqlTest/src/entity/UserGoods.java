@@ -6,12 +6,11 @@ public class UserGoods {
 	private int userGoodsId;
 	private int userId;
 	private int goodsId;
+	private int goodsCount;
 	private double goods_buy_price;
 	private Timestamp userGoodsSetTime;
 	private Timestamp userGoodsUpDateTime;
 	private int userGoodsStatus;
-	
-	
 	public int getUserGoodsId() {
 		return userGoodsId;
 	}
@@ -29,6 +28,12 @@ public class UserGoods {
 	}
 	public void setGoodsId(int goodsId) {
 		this.goodsId = goodsId;
+	}
+	public int getGoodsCount() {
+		return goodsCount;
+	}
+	public void setGoodsCount(int goodsCount) {
+		this.goodsCount = goodsCount;
 	}
 	public double getGoods_buy_price() {
 		return goods_buy_price;
@@ -58,15 +63,18 @@ public class UserGoods {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public UserGoods(int userGoodsId, int userId, int goodsId, double goods_buy_price, Timestamp userGoodsSetTime,
-			Timestamp userGoodsUpDateTime, int userGoodsStatus) {
+	public UserGoods(int userGoodsId, int userId, int goodsId, int goodsCount, double goods_buy_price,
+			Timestamp userGoodsSetTime, Timestamp userGoodsUpDateTime, int userGoodsStatus) {
 		super();
 		this.userGoodsId = userGoodsId;
 		this.userId = userId;
 		this.goodsId = goodsId;
+		this.goodsCount = goodsCount;
 		this.goods_buy_price = goods_buy_price;
 		this.userGoodsSetTime = userGoodsSetTime;
 		this.userGoodsUpDateTime = userGoodsUpDateTime;
 		this.userGoodsStatus = userGoodsStatus;
 	}
+	
+	
 }
