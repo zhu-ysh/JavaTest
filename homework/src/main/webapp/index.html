@@ -1,0 +1,103 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script src="js/jquery/2.0.0/jquery.min.js"></script>
+<link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<table>
+					<tr>
+						<td>
+							<select id="region" class="form-control">
+								<option value="" selected = "selected">未选</option>
+								<option value="甘井子区">甘井子区</option>
+								<option value="沙河口区">沙河口区</option>
+								<option value="高新园区">高新园区</option>
+							</select></td>
+						<td>
+							<select id="type" class="form-control">
+								<option value="" selected = "selected">未选</option>
+								<option value="2室1厅">2室1厅</option>
+								<option value="1室1厅">1室1厅</option>
+							</select></td>
+						<td>
+							<select id="price" class="form-control">
+								<option value="-1" selected = "selected">未选</option>
+								<option value="1000">1000-2000</option>
+								<option value="2000">2000-3000</option>
+								<option value="3000">3000-4000</option>
+							</select></td>
+						<td>
+							<button id="select" type="button" class="btn btn-primary" onclick="select()">查询</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<br/>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>房间编号</th>
+							<th>区域</th>
+							<th>户型</th>
+							<th>价格</th>
+						</tr>
+					</thead>
+					<tbody id="tbody">
+						<tr>
+							<td>1</td>
+							<td>TB - Monthly</td>
+							<td>01/04/2012</td>
+							<td>Default</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+<script>
+	function select(){
+		var houseRegion = ($("#region option:selected").val());
+		var houseType = ($("#type option:selected").val());
+		var housePrice = ($("#price option:selected").val());
+			$.ajax({
+                "url":"select.do",
+                "async":"false",
+                "type":"post",
+                "data":{
+                	"houseId":0,
+                	"houseRegion":houseRegion,
+                	"houseType":houseType,
+                	"housePrice":housePrice
+                },
+                "success" : function(data){
+                    $("#tbody").children("tr").remove();
+                    $.each(data,function(i,e){
+                    	 var $_tr = $("<tr></tr>");
+                         var $_td1 = $("<td name='houseId'></td>");
+                         $_td1.html(e.houseId);
+                         var $_td2 = $("<td name='houseRegion'></td>");
+                         $_td2.html(e.houseRegion);
+                         var $_td3 = $("<td name='houseType'></td>");
+                         $_td3.html(e.houseType);
+                         var $_td4 = $("<td name='housePrice'></td>");
+                         $_td4.html(e.housePrice);
+                         $_tr.append($_td1).append($_td2).append($_td3).append($_td4);
+                         $("#tbody").append($_tr);
+                    });
+				}
+			})
+	}
+</script>
+</body>
+</html>

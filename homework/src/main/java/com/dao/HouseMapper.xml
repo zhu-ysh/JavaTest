@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.HouseMapper">
+<!-- 当数据库列和类中属性名称不能一一对应的时候 -->
+	<resultMap type="com.entity.House" id="resultMap">
+		<!-- 主键映射使用id column数据库的列名,property java类属性-->
+		<id column="house_id" property="houseId"/>
+		<result column="house_region" property="houseRegion"/>
+		<result column="house_type" property="houseType"/>
+		<result column="house_price" property="housePrice"/>
+	</resultMap>
+	
+	<sql id="allColumn">
+		house_id,house_region,house_type,house_price
+	</sql>
+	
+	<select id="select" resultMap="resultMap">
+		select <include refid="allColumn"/> from house
+		<where>
+			<if test="houseRegion!=''">and house_region = #{houseRegion}</if>
+			<if test="houseType!=''">and house_type = #{houseType}</if>
+			<if test="housePrice!=-1">and house_price between #{housePrice} and ${housePrice}+ 1000</if>
+		</where>
+	</select>
+
+
+</mapper>
