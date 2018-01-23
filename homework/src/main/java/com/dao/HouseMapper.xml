@@ -14,12 +14,12 @@
 		house_id,house_region,house_type,house_price
 	</sql>
 	
-	<select id="select" resultMap="resultMap">
+	<select id="select" resultMap="resultMap" parameterType="com.entity.House">
 		select <include refid="allColumn"/> from house
 		<where>
-			<if test="houseRegion!=''">and house_region = #{houseRegion}</if>
-			<if test="houseType!=''">and house_type = #{houseType}</if>
-			<if test="housePrice!=-1">and house_price between #{housePrice} and ${housePrice}+ 1000</if>
+			<if test="houseRegion!=null">and house_region = #{houseRegion}</if>
+			<if test="houseType!=null">and house_type = #{houseType}</if> 
+			<if test="housePrice!=0">and house_price between #{housePrice} and ${housePrice}+ 1000</if>
 		</where>
 	</select>
 

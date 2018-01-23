@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.entity.Goods">
+    <id column="GOODS_ID" jdbcType="DECIMAL" property="goodsId" />
+    <result column="GOODS_NAME" jdbcType="VARCHAR" property="goodsName" />
+    <result column="GOODS_PRICE" jdbcType="DECIMAL" property="goodsPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    GOODS_ID, GOODS_NAME, GOODS_PRICE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from GOODS
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from GOODS
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Goods">
+    insert into GOODS (GOODS_ID, GOODS_NAME, GOODS_PRICE
+      )
+    values (#{goodsId,jdbcType=DECIMAL}, #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Goods">
+    insert into GOODS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        GOODS_ID,
+      </if>
+      <if test="goodsName != null">
+        GOODS_NAME,
+      </if>
+      <if test="goodsPrice != null">
+        GOODS_PRICE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Goods">
+    update GOODS
+    <set>
+      <if test="goodsName != null">
+        GOODS_NAME = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        GOODS_PRICE = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Goods">
+    update GOODS
+    set GOODS_NAME = #{goodsName,jdbcType=VARCHAR},
+      GOODS_PRICE = #{goodsPrice,jdbcType=DECIMAL}
+    where GOODS_ID = #{goodsId,jdbcType=DECIMAL}
+  </update>
+</mapper>

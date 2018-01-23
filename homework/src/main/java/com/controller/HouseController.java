@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,7 +19,7 @@ public class HouseController {
 	private HouseService houseServiceImpl;
 	
 	@RequestMapping("select")
-	public @ResponseBody List<House> select(House house) {
+	public @ResponseBody List<House> select(@RequestBody House house) {
 		System.out.println(house);
 		ArrayList<House> houses = houseServiceImpl.select(house);
 		for (House house2 : houses) {

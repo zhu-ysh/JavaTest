@@ -15,27 +15,30 @@
 				<table>
 					<tr>
 						<td>
-							<select id="region" class="form-control">
-								<option value="" selected = "selected">未选</option>
+						区域:
+							<select name="houseRegion" class="form-control">
+								<option value="未选" selected = "selected">未选</option>
 								<option value="甘井子区">甘井子区</option>
 								<option value="沙河口区">沙河口区</option>
 								<option value="高新园区">高新园区</option>
 							</select></td>
 						<td>
-							<select id="type" class="form-control">
-								<option value="" selected = "selected">未选</option>
+						户型:
+							<select name="houseType" class="form-control">
+								<option value="未选" selected = "selected">未选</option>
 								<option value="2室1厅">2室1厅</option>
 								<option value="1室1厅">1室1厅</option>
 							</select></td>
 						<td>
-							<select id="price" class="form-control">
-								<option value="-1" selected = "selected">未选</option>
+						价格:
+							<select name="housePrice" class="form-control">
+								<option value="未选" selected = "selected">未选</option>
 								<option value="1000">1000-2000</option>
 								<option value="2000">2000-3000</option>
 								<option value="3000">3000-4000</option>
 							</select></td>
 						<td>
-							<button id="select" type="button" class="btn btn-primary" onclick="select()">查询</button>
+							<button id="select" type="button" class="btn btn-primary" onclick="select1()">查询</button>
 						</td>
 					</tr>
 				</table>
@@ -55,10 +58,10 @@
 					</thead>
 					<tbody id="tbody">
 						<tr>
-							<td>1</td>
-							<td>TB - Monthly</td>
-							<td>01/04/2012</td>
-							<td>Default</td>
+							<td>666666</td>
+							<td>幸福里</td>
+							<td>两室一厅</td>
+							<td>好几百万</td>
 						</tr>
 					</tbody>
 				</table>
@@ -66,20 +69,26 @@
 		</div>
 	</div>
 <script>
-	function select(){
-		var houseRegion = ($("#region option:selected").val());
-		var houseType = ($("#type option:selected").val());
-		var housePrice = ($("#price option:selected").val());
-			$.ajax({
+	$("select").change(function () {
+		select1();
+	});
+
+	function select1(){
+		var sels = $("select");
+		var house = {};
+		for(var i = 0;i<sels.length;i++){
+			if("未选" != sels[i].value){
+				house[sels[i].name] = sels[i].value;
+			}
+		}
+			
+		$.ajax({
                 "url":"select.do",
                 "async":"false",
                 "type":"post",
-                "data":{
-                	"houseId":0,
-                	"houseRegion":houseRegion,
-                	"houseType":houseType,
-                	"housePrice":housePrice
-                },
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                "data":JSON.stringify(house),
                 "success" : function(data){
                     $("#tbody").children("tr").remove();
                     $.each(data,function(i,e){
